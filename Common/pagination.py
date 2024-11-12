@@ -7,7 +7,7 @@ from States.State import ClientStateGroup
 
 pagination_router = Router()
 
-async def make_caption_users(res):
+async def make_caption_users(res, statement):
     cnt = 0
     numb = 0
     dictionary = {}
@@ -17,7 +17,10 @@ async def make_caption_users(res):
         cnt += 1
         numb += 1
         nickname = res[i][0]
-        values_stuff.append((nickname, res[i][1]))
+        if statement == 'Moderators':
+            values_stuff.append((nickname, res[i][1]))
+        else:
+            values_stuff.append((nickname, res[i][1], res[i][2], res[i][3], res[i][4]))
         str_stuff += f"{f'{numb}){nickname}':<27}\n"
 
         if str_stuff.count("\n") < 11:
@@ -34,7 +37,7 @@ async def make_caption_users(res):
                     "values_stuff": values_stuff}]
     
     cnt_stuff = dictionary["1"][0]["str_stuff"].count("\n") - 3
-    keyboard = admn_kb.get_users(cnt_stuff, "1")
+    keyboard = admn_kb.get_users(cnt_stuff, "1", statement)
     if len(dictionary.keys()) > 1:
         keyboard.inline_keyboard.append([InlineKeyboardButton(text=">>", callback_data="next_a")])
   
@@ -46,15 +49,9 @@ async def pagination_admin(state):
         current_page = int(data.get("current_page"))
         dictionary = data.get("dictionary")
         statement = data.get("statement")
-        if statement == "Users":
-            cnt_user = dictionary[str(current_page)][0]["str_stuff"].count("\n") - 3
-            keyboard = admn_kb.get_users(cnt_user, current_page)
-        elif statement == "Blocked_users":
-            cnt_user = dictionary[str(current_page)][0]["str_stuff"].count("\n") - 3
-            keyboard = admn_kb.get_blocked_users(cnt_user, current_page)
-        else:
-            keyboard = admn_kb.get_orders_btns()
-
+        cnt_user = dictionary[str(current_page)][0]["str_stuff"].count("\n") - 3
+        keyboard = admn_kb.get_users(cnt_user, current_page, statement)
+        
         if current_page == 1:
             keyboard.inline_keyboard.append([InlineKeyboardButton(text=">>", callback_data="next_a")])
             info = dictionary[str(current_page)][0]["str_stuff"]

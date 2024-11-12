@@ -5,7 +5,7 @@ import asyncio
 
 from Common.pagination import pagination_router
 from Commands.MainCommands import mainCommands
-from Callbacks.AdminCallbacks.moderators import AdminCallbackRouter
+from Callbacks.AdminCallbacks.admin import AdminCallbackRouter
 
 from Data.types.core import create_tables
 

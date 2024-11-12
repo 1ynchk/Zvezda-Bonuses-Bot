@@ -8,15 +8,14 @@ class Moderators(Base):
     __tablename__ = 'users'
 
     pk: Mapped[int] = mapped_column(primary_key=True)
-    nickname: Mapped[str] = mapped_column(String(50))
+    nickname: Mapped[str] = mapped_column(String(50), unique=True)
 
-class Customer(Base):
+class Customers(Base):
     __tablename__ = 'customers'
 
     pk: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50))
-    surname: Mapped[str] = mapped_column(String(50))
-    code: Mapped[str] = mapped_column(unique=True)
-    email: Mapped[str] = mapped_column(String(60))
-    number: Mapped[str] = mapped_column(String(20))
-    bonuses: Mapped[int] = mapped_column(Integer)
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    surname: Mapped[str] = mapped_column(String(50), nullable=False)
+    number: Mapped[str] = mapped_column(String(20), unique=True)
+    bonuses: Mapped[int] = mapped_column(Integer, default=0)
+    

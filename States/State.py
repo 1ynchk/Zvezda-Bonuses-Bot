@@ -5,3 +5,7 @@ class ClientStateGroup(StatesGroup):
 
     add_moder = State()
     confirm_adding = State()
+
+    increase_bonuses = State()
+    confirm_increasing = State()
+    confirm_decreasing = State()

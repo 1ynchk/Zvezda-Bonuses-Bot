@@ -24,4 +24,4 @@ async def Admin(m: types.Message, state: FSMContext):
 async def Admin(c: types.CallbackQuery, state: FSMContext):
     await state.clear()
     if int(c.from_user.id) == int(os.getenv('ADMIN')):
-        await c.message.edit_text(text='Админ панель', reply_markup=admn_kb.admin_panel())
+        await c.message.edit_text(text='➕➕➕➕ Админ панель ➕➕➕➕', reply_markup=admn_kb.admin_panel())
