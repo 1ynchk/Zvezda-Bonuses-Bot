@@ -8,8 +8,6 @@ from Commands.MainCommands import mainCommands
 from Callbacks.AdminCallbacks.admin import AdminCallbackRouter
 from Callbacks.ModeratorCallbacks.moderator import ModeratorRouter
 
-from Data.types.core import create_tables
-
 load_dotenv()
 
 class TelegramBot:

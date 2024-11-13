@@ -60,13 +60,12 @@ class Core:
             await session.commit()
 
     @staticmethod
-    async def IncreaseBonuses(pk, number, value):
+    async def IncreaseBonuses(number, value):
         async with async_session() as session:
             
             await session.execute(
                 update(Customers)
                 .where(
-                    Customers.pk == pk,
                     Customers.number == number)
                 .values(
                     bonuses = Customers.bonuses + value
@@ -75,13 +74,12 @@ class Core:
             await session.commit()
 
     @staticmethod
-    async def DecreaseBonuses(pk, number):
+    async def DecreaseBonuses(number):
         async with async_session() as session:
             
             await session.execute(
                 update(Customers)
                 .where(
-                    Customers.pk == pk,
                     Customers.number == number)
                 .values(
                     bonuses = 0
@@ -92,6 +90,17 @@ class Core:
     @staticmethod
     async def CreateClient(name, surname, number):
         async with async_session() as session:
-            user = Customers(name=name, surname=surname, number=number)
+            user = Customers(name=name, surname=surname, number=str(number))
             session.add(user)
             await session.commit()
+
+    @staticmethod
+    async def FindClient(number):
+        async with async_session() as session:
+            res = await session.execute(select(Customers).where(Customers.number == number))
+            user = res.scalar()
+
+            if user is None:
+                return False 
+            else:
+                return (user.name, user.surname, user.number, user.bonuses)

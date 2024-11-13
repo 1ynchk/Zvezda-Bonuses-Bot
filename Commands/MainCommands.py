@@ -24,6 +24,14 @@ async def Admin(m: types.Message, state: FSMContext):
     else:
         await m.answer(text='У вас не хватает прав на админ панель', reply_markup=mdrt_kb.moderator_panel())
 
+@mainCommands.callback_query(F.data == 'moder_panel')
+async def Admin(c: types.CallbackQuery, state: FSMContext):
+    moderators = await Core.GetAllModeratorsView()
+
+    await state.clear()
+    if int(c.from_user.id) == int(os.getenv('ADMIN')) or int(c.from_user.username) in moderators:
+        await c.message.edit_text(text='➕➕➕➕ Панель модератора ➕➕➕➕', reply_markup=mdrt_kb.moderator_panel())
+
 @mainCommands.callback_query(F.data == 'admin_panel')
 async def Admin(c: types.CallbackQuery, state: FSMContext):
     await state.clear()
@@ -40,10 +48,3 @@ async def Admin(m: types.Message, state: FSMContext):
     if int(m.from_user.id) == int(os.getenv('ADMIN')) or int(m.from_user.username) in moderators:
         await m.answer(text='➕➕➕➕ Панель модератора ➕➕➕➕', reply_markup=mdrt_kb.moderator_panel())
 
-@mainCommands.callback_query(F.data == 'moder_panel')
-async def Admin(c: types.CallbackQuery, state: FSMContext):
-    moderators = await Core.GetAllModeratorsView()
-
-    await state.clear()
-    if int(c.from_user.id) == int(os.getenv('ADMIN')) or int(m.from_user.username) in moderators:
-        await c.message.edit_text(text='➕➕➕➕ Панель модератора ➕➕➕➕', reply_markup=mdrt_kb.moderator_panel())

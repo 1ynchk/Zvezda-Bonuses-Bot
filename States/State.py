@@ -12,3 +12,6 @@ class ClientStateGroup(StatesGroup):
 
     create_client = State()
     input_number = State()
+
+    find_client = State()
+    moderator_panel = State()

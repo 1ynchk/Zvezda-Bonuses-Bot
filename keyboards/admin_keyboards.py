@@ -61,7 +61,7 @@ def confirm_creating_moderator():
 
 def confirm_increasing_bonuses():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Да', callback_data='confirm_increasing_bonuses'),
+        [InlineKeyboardButton(text='Да', callback_data='confirm_increasing_bonuses_moder'),
          InlineKeyboardButton(text='Нет', callback_data='admin_panel')]
     ])
 

@@ -156,11 +156,10 @@ async def IncreaseBonusesState(m: Message, state: FSMContext):
 async def ConfirmIncreasingBonuses(c: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     user_name = data.get('user_name')
-    user_id = data.get('user_id')
     user_number = data.get('user_number')
     value = data.get('value')
 
-    await Core.IncreaseBonuses(user_id, user_number, value)
+    await Core.IncreaseBonuses(user_number, value)
     await c.message.edit_text(text=f'Баллы были начислены {user_name}✅', reply_markup=admn_kb.get_menu())
 
 @AdminCallbackRouter.callback_query(F.data == 'decrease_bonuses')
@@ -177,5 +176,5 @@ async def ConfirmDecreasingBonuses(c: CallbackQuery, state: FSMContext):
     user_id = data.get('user_id')
     user_number = data.get('user_number')
 
-    await Core.DecreaseBonuses(user_id, user_number)
+    await Core.DecreaseBonuses(user_number)
     await c.message.edit_text(text=f'Баллы сняты у {user_name}✅', reply_markup=admn_kb.get_menu())
