@@ -8,8 +8,6 @@ from keyboards import admin_keyboards as admn_kb
 from Common import pagination as pag
 from States.State import ClientStateGroup
 
-import pprint
-
 AdminCallbackRouter = Router()
 
 @AdminCallbackRouter.callback_query(F.data == 'admin_moderators')

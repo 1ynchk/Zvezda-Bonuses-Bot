@@ -16,7 +16,15 @@ class Core:
             queryset = res.scalars().all()
             queryset = [(m.nickname, m.pk) for m in queryset]
             return queryset
-        
+
+    @staticmethod
+    async def GetAllModeratorsView():
+        async with async_session() as session:
+            res = await session.execute(select(Moderators))
+            queryset = res.scalars().all()
+            queryset = [m.nickname for m in queryset]
+            return queryset
+
     @staticmethod
     async def DeleteModerator(pk, nickname):
         async with async_session() as session:
@@ -79,4 +87,11 @@ class Core:
                     bonuses = 0
                 )
             )
+            await session.commit()
+
+    @staticmethod
+    async def CreateClient(name, surname, number):
+        async with async_session() as session:
+            user = Customers(name=name, surname=surname, number=number)
+            session.add(user)
             await session.commit()

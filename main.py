@@ -6,6 +6,7 @@ import asyncio
 from Common.pagination import pagination_router
 from Commands.MainCommands import mainCommands
 from Callbacks.AdminCallbacks.admin import AdminCallbackRouter
+from Callbacks.ModeratorCallbacks.moderator import ModeratorRouter
 
 from Data.types.core import create_tables
 
@@ -17,9 +18,10 @@ class TelegramBot:
         self.bot = bot 
         self.dp = dp 
         self.dp.include_routers(
+            ModeratorRouter,
             pagination_router,
             mainCommands,
-            AdminCallbackRouter
+            AdminCallbackRouter,
         )
 
 async def on_startup(bot):

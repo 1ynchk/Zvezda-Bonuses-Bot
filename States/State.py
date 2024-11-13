@@ -9,3 +9,6 @@ class ClientStateGroup(StatesGroup):
     increase_bonuses = State()
     confirm_increasing = State()
     confirm_decreasing = State()
+
+    create_client = State()
+    input_number = State()

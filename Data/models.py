@@ -16,6 +16,6 @@ class Customers(Base):
     pk: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     surname: Mapped[str] = mapped_column(String(50), nullable=False)
-    number: Mapped[str] = mapped_column(String(20), unique=True)
+    number: Mapped[int] = mapped_column(Integer, unique=True)
     bonuses: Mapped[int] = mapped_column(Integer, default=0)
     
