@@ -14,7 +14,7 @@ mainCommands = Router()
 
 @mainCommands.message(Command('start'))
 async def Start(m: types.Message):
-    pass
+    await m.answer(text='Выберите свою роль', reply_markup=admn_kb.start())
 
 @mainCommands.message(Command('admin'))
 async def Admin(m: types.Message, state: FSMContext):
@@ -22,15 +22,17 @@ async def Admin(m: types.Message, state: FSMContext):
     if int(m.from_user.id) == int(os.getenv('ADMIN')):
         await m.answer(text='➕➕➕➕ Админ панель ➕➕➕➕', reply_markup=admn_kb.admin_panel())
     else:
-        await m.answer(text='У вас не хватает прав на админ панель', reply_markup=mdrt_kb.moderator_panel())
+        await m.answer(text='У вас не хватает прав на админ панель')
 
 @mainCommands.callback_query(F.data == 'moder_panel')
 async def Admin(c: types.CallbackQuery, state: FSMContext):
     moderators = await Core.GetAllModeratorsView()
 
     await state.clear()
-    if int(c.from_user.id) == int(os.getenv('ADMIN')) or int(c.from_user.username) in moderators:
+    if int(c.from_user.id) == int(os.getenv('ADMIN')) or str(c.from_user.username) in moderators:
         await c.message.edit_text(text='➕➕➕➕ Панель модератора ➕➕➕➕', reply_markup=mdrt_kb.moderator_panel())
+    else:
+        await c.message.edit_text(text='У вас нет прав на панель модератора')
 
 @mainCommands.callback_query(F.data == 'admin_panel')
 async def Admin(c: types.CallbackQuery, state: FSMContext):
@@ -38,13 +40,14 @@ async def Admin(c: types.CallbackQuery, state: FSMContext):
     if int(c.from_user.id) == int(os.getenv('ADMIN')):
         await c.message.edit_text(text='➕➕➕➕ Админ панель ➕➕➕➕', reply_markup=admn_kb.admin_panel())
     else:
-        await c.answer(text='У вас не хватает прав на админ панель', reply_markup=mdrt_kb.moderator_panel())
+        await c.answer(text='У вас не хватает прав на админ панель')
 
 @mainCommands.message(Command('moderator'))
 async def Admin(m: types.Message, state: FSMContext):
     moderators = await Core.GetAllModeratorsView()
 
     await state.clear()
-    if int(m.from_user.id) == int(os.getenv('ADMIN')) or int(m.from_user.username) in moderators:
+    if int(m.from_user.id) == int(os.getenv('ADMIN')) or str(m.from_user.username) in moderators:
         await m.answer(text='➕➕➕➕ Панель модератора ➕➕➕➕', reply_markup=mdrt_kb.moderator_panel())
-
+    else:
+        await m.answer(text='У вас нет прав на панель модератора')

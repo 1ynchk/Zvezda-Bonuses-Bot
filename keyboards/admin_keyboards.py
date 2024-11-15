@@ -1,5 +1,11 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+def start():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Админ', callback_data='admin_panel')],
+        [InlineKeyboardButton(text='Модератор', callback_data='moder_panel')]
+    ])
+
 def admin_panel():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Модераторы', callback_data='admin_moderators'),
@@ -32,8 +38,9 @@ def get_menu_client():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Назад⬅', callback_data='admin_clients')],
         [InlineKeyboardButton(text='Удалить❌', callback_data='admin_delete_client')],
-        [InlineKeyboardButton(text='Начислить бонусы➕', callback_data='increase_bonuses')],
-        [InlineKeyboardButton(text='Снять бонусы➖', callback_data='decrease_bonuses')]
+        [InlineKeyboardButton(text='Начислить бонусы➕', callback_data='increase_bonuses'),
+         InlineKeyboardButton(text='Снять бонусы➖', callback_data='decrease_bonuses_admn')],
+        [InlineKeyboardButton(text='Изменить номер', callback_data='change_number')]
     ])
 
 def get_menu():
@@ -61,12 +68,18 @@ def confirm_creating_moderator():
 
 def confirm_increasing_bonuses():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Да', callback_data='confirm_increasing_bonuses_moder'),
+        [InlineKeyboardButton(text='Да', callback_data='confirm_increasing_bonuses_admn'),
          InlineKeyboardButton(text='Нет', callback_data='admin_panel')]
     ])
 
 def confirm_decreasing_bonuses():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Да', callback_data='confirm_decreasing_bonuses'),
+        [InlineKeyboardButton(text='Да', callback_data='confirm_decreasing_bonuses_admn'),
+         InlineKeyboardButton(text='Нет', callback_data='admin_panel')]
+    ])
+
+def confirm_changing_number():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Да', callback_data='confirm_changing_number'),
          InlineKeyboardButton(text='Нет', callback_data='admin_panel')]
     ])

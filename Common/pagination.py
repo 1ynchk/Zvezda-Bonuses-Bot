@@ -16,24 +16,28 @@ async def make_caption_users(res, statement):
     for i in range(len(res)):
         cnt += 1
         numb += 1
-        nickname = res[i][0]
+        if statement == 'Clients':
+            nickname = res[i][0] + ' ' + res[i][1]
+        else:
+            nickname = res[i][0]
         if statement == 'Moderators':
             values_stuff.append((nickname, res[i][1]))
         else:
-            values_stuff.append((nickname, res[i][1], res[i][2], res[i][3], res[i][4]))
+            values_stuff.append((res[i][0], res[i][1], res[i][2], res[i][3], res[i][4]))
         str_stuff += f"{f'{numb}){nickname}':<27}\n"
 
         if str_stuff.count("\n") < 11:
+            separator = '-' * 33
             if cnt % 10 == 0:
                 numb = 0
                 dictionary[f"{cnt // 10}"] = [
-                    {"str_stuff": "```" + f"\n{'Никнейм':<30}\n{33 * "-"}\n" + str_stuff + "```",
+                    {"str_stuff": "```" + f"\n{'Никнейм':<30}\n{separator}\n {str_stuff} ```",
                     "values_stuff": values_stuff}]
                 str_stuff = ""
 
             else:
                 dictionary[f"{cnt // 10 + 1}"] = [
-                    {"str_stuff": "```" + f"\n{'Никнейм':<30}\n{33 * "-"}\n" + str_stuff + "```",
+                    {"str_stuff": "```" + f"\n{'Никнейм':<30}\n{separator}\n {str_stuff} ```",
                     "values_stuff": values_stuff}]
     
     cnt_stuff = dictionary["1"][0]["str_stuff"].count("\n") - 3

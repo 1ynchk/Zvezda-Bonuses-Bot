@@ -31,6 +31,14 @@ def confirm_decreasing_bonuses():
 
 def get_menu_client():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Начислить бонусы➕', callback_data='increase_bonuses_moder')],
-        [InlineKeyboardButton(text='Снять бонусы➖', callback_data='decrease_bonuses_moder')]
+        [InlineKeyboardButton(text='В меню', callback_data='moder_panel')],
+        [InlineKeyboardButton(text='Начислить бонусы➕', callback_data='increase_bonuses_moder'),
+         InlineKeyboardButton(text='Снять бонусы➖', callback_data='decrease_bonuses_moder')]
+    ])
+
+def find_client_by():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='В меню', callback_data='moder_panel')],
+        [InlineKeyboardButton(text='Телефон', callback_data='moder_find_client_by_number'),
+         InlineKeyboardButton(text='ID', callback_data='moder_find_client_by_id')]
     ])

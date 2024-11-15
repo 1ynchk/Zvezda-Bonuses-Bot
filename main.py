@@ -10,6 +10,9 @@ from Callbacks.ModeratorCallbacks.moderator import ModeratorRouter
 
 load_dotenv()
 
+BOT = Bot(os.getenv('TOKEN'))
+DP = Dispatcher()
+
 class TelegramBot:
 
     def __init__(self, bot, dp):
@@ -30,12 +33,25 @@ async def on_startup(bot):
         ]
     )
 
+async def keep_alive(dispatcher):
+    print('hello')
+    while True:
+        try:
+            await dispatcher.bot.get_me()
+        except Exception as e:
+            print(f"Connection lost: {e}")
+        await asyncio.sleep(600)
+
 async def main():
-    BOT = Bot(os.getenv('TOKEN'))
-    DP = Dispatcher()
     start_bot = TelegramBot(BOT, DP)
     await on_startup(BOT)
     await DP.start_polling(BOT, skip_updates=True)
 
+async def start():
+    await asyncio.gather(
+        main(),
+        keep_alive(DP)
+    )
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(start())

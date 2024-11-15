@@ -74,17 +74,30 @@ class Core:
             await session.commit()
 
     @staticmethod
-    async def DecreaseBonuses(number):
+    async def DecreaseBonuses(number, value):
         async with async_session() as session:
-            
-            await session.execute(
-                update(Customers)
-                .where(
-                    Customers.number == number)
-                .values(
-                    bonuses = 0
+
+            obj = await session.execute(select(Customers).where(Customers.number == number))
+            user = obj.scalar()
+
+            if user.bonuses <= value:
+                await session.execute(
+                    update(Customers)
+                    .where(
+                        Customers.number == number)
+                    .values(
+                        bonuses = 0
+                    )
                 )
-            )
+            else:
+                await session.execute(
+                    update(Customers)
+                    .where(
+                        Customers.number == number)
+                    .values(
+                        bonuses = Customers.bonuses - value
+                    )
+                )
             await session.commit()
 
     @staticmethod
@@ -95,12 +108,29 @@ class Core:
             await session.commit()
 
     @staticmethod
-    async def FindClient(number):
+    async def FindClient(number, statement):
         async with async_session() as session:
-            res = await session.execute(select(Customers).where(Customers.number == number))
+            if statement == 'NUMBER':
+                res = await session.execute(select(Customers).where(Customers.number == str(number)))
+            else:
+                res = await session.execute(select(Customers).where(Customers.pk == number))
             user = res.scalar()
 
             if user is None:
                 return False 
             else:
                 return (user.name, user.surname, user.number, user.bonuses)
+            
+    @staticmethod
+    async def ChangeNumber(pk, number):
+        async with async_session() as session:
+            await session.execute(
+                update(Customers)
+                    .where(
+                        Customers.pk == pk
+                    )
+                    .values(
+                        number = number
+                    )
+            )
+            await session.commit()
