@@ -13,7 +13,7 @@ def get_moderator_menu():
 
 def confirm_crating_client():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Да', callback_data='confirm_crating_client')],
+        [InlineKeyboardButton(text='Да', callback_data='confirm_crating_client_mdrt')],
         [InlineKeyboardButton(text='Нет', callback_data='moder_panel')],
     ])
 

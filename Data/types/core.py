@@ -74,30 +74,22 @@ class Core:
             await session.commit()
 
     @staticmethod
-    async def DecreaseBonuses(number, value):
+    async def DecreaseBonuses(number):
         async with async_session() as session:
 
-            obj = await session.execute(select(Customers).where(Customers.number == number))
-            user = obj.scalar()
+            # obj = await session.execute(select(Customers).where(Customers.number == number))
+            # user = obj.scalar()
 
-            if user.bonuses <= value:
-                await session.execute(
-                    update(Customers)
-                    .where(
-                        Customers.number == number)
-                    .values(
-                        bonuses = 0
-                    )
+            
+            await session.execute(
+                update(Customers)
+                .where(
+                    Customers.number == number)
+                .values(
+                    bonuses = 0
                 )
-            else:
-                await session.execute(
-                    update(Customers)
-                    .where(
-                        Customers.number == number)
-                    .values(
-                        bonuses = Customers.bonuses - value
-                    )
-                )
+            )
+            
             await session.commit()
 
     @staticmethod

@@ -160,7 +160,7 @@ async def IncreaseBonuses(c: CallbackQuery, state:FSMContext):
     data = await state.get_data()
     user_name = data.get('user_name')
     
-    await c.message.edit_text(text=f'Укажите кол-во начисляемых баллов для {user_name}', 
+    await c.message.edit_text(text=f'Укажите цену чека {user_name}', 
                               reply_markup=admn_kb.get_menu())
     
     await state.set_state(ClientStateGroup.increase_bonuses_admn)
@@ -171,7 +171,7 @@ async def IncreaseBonusesState(m: Message, state: FSMContext):
     user_name = data.get('user_name')
 
     try:
-        value = int(m.text)
+        value = int(m.text) * 0.02
     except Exception:
         await m.answer(text='Введите целое числовое значение превышающее 0', reply_markup=admn_kb.get_menu())
     else:
@@ -196,28 +196,31 @@ async def ConfirmIncreasingBonuses(c: CallbackQuery, state: FSMContext):
 async def IncreaseBonuses(c: CallbackQuery, state:FSMContext):
     data = await state.get_data()
     user_name = data.get('user_name')
-    
-    await c.message.edit_text(text=f'Укажите кол-во снимаемых баллов у {user_name}', 
-                              reply_markup=admn_kb.get_menu())
-    
-    await state.set_state(ClientStateGroup.decrease_bonuses_admn)
 
-@AdminCallbackRouter.message(StateFilter(ClientStateGroup.decrease_bonuses_admn))
-async def IncreaseBonusesState(m: Message, state: FSMContext):
-    data = await state.get_data()
-    user_name = data.get('user_name')
+    await c.message.edit_text(text=f'Вы подтверждаете снятие баллов у клиента {user_name}?', reply_markup=admn_kb.confirm_decreasing_bonuses())
+    await state.set_state(ClientStateGroup.confirm_decreasing)
+    
+    # await c.message.edit_text(text=f'Укажите кол-во снимаемых баллов у {user_name}', 
+    #                           reply_markup=admn_kb.get_menu())
+    
+    # await state.set_state(ClientStateGroup.decrease_bonuses_admn)
 
-    try:
-        value = int(m.text)
-    except Exception:
-        await m.answer(text='Введите целое числовое значение превышающее 0', reply_markup=admn_kb.get_menu())
-    else:
-        if value <= 0:
-            await m.answer(text='Значение должно быть больше 0', reply_markup=admn_kb.get_menu())
-        else:
-            await m.answer(text=f'Вы подтверждаете снятие {value} баллов у клиента {user_name}?', reply_markup=admn_kb.confirm_decreasing_bonuses())
-            await state.set_state(ClientStateGroup.confirm_decreasing)
-            await state.update_data(value=value)
+# @AdminCallbackRouter.message(StateFilter(ClientStateGroup.decrease_bonuses_admn))
+# async def IncreaseBonusesState(m: Message, state: FSMContext):
+#     data = await state.get_data()
+#     user_name = data.get('user_name')
+
+#     try:
+#         value = int(m.text)
+#     except Exception:
+#         await m.answer(text='Введите целое числовое значение превышающее 0', reply_markup=admn_kb.get_menu())
+#     else:
+#         if value <= 0:
+#             await m.answer(text='Значение должно быть больше 0', reply_markup=admn_kb.get_menu())
+#         else:
+#             await m.answer(text=f'Вы подтверждаете снятие {value} баллов у клиента {user_name}?', reply_markup=admn_kb.confirm_decreasing_bonuses())
+#             await state.set_state(ClientStateGroup.confirm_decreasing)
+#             await state.update_data(value=value)
 
 @AdminCallbackRouter.callback_query(F.data == 'confirm_decreasing_bonuses_admn')
 async def ConfirmDecreasingBonuses(c: CallbackQuery, state: FSMContext):
@@ -226,5 +229,5 @@ async def ConfirmDecreasingBonuses(c: CallbackQuery, state: FSMContext):
     user_number = data.get('user_number')
     value = data.get('value')
 
-    await Core.DecreaseBonuses(user_number, value)
+    await Core.DecreaseBonuses(user_number)
     await c.message.edit_text(text=f'Баллы сняты у {user_name}✅', reply_markup=admn_kb.get_menu())

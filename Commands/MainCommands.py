@@ -14,6 +14,7 @@ mainCommands = Router()
 
 @mainCommands.message(Command('start'))
 async def Start(m: types.Message):
+    print(m.from_user.id)
     await m.answer(text='Выберите свою роль', reply_markup=admn_kb.start())
 
 @mainCommands.message(Command('admin'))
